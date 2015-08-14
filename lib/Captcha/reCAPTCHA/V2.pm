@@ -11,6 +11,37 @@ use JSON;
 
 # VERSION
 
+=head1 SYNOPSIS
+
+Captcha::reCAPTCHA::V2 enables you to integrate reCAPTCHA version 2 into your
+web application.
+
+    use Captcha::reCAPTCHA::V2;
+
+    # Create a new instance of Captcha::reCAPTCHA::V2
+    my $rc = Captcha::reCAPTCHA::V2->new;
+
+    # Get HTML code to display the reCAPTCHA
+    my $rc_html = $rc->get_html('public key');
+
+    # Verify user's response
+    my $result = $rc->check_answer('private key', $response);
+
+    if ($result->{is_valid}){
+        # Good
+    } else {
+        # Bad
+        $error = $result->{error};
+    }
+
+=method new
+
+Creates a new instance of Captcha::reCAPTCHA::V2.
+
+    my $rc = Captcha::reCAPTCHA::V2->new;
+
+=cut
+
 sub new {
     my $class = shift;
     $class = ref $class if ref $class;
@@ -57,6 +88,46 @@ sub _get_grecaptcha {
     );
 }
 
+=method get_html
+
+Returns the HTML code for rendering the reCAPTCHA widget.
+
+    my $html = $rc->get_html('public key', { theme => 'dark' });
+
+Parameters:
+
+=over 4
+
+=item * C<$publickey>
+
+B<(Required)> The site's public key provided by API
+
+=item * C<$options>
+
+A reference to a hash of options that affect the appearance and behavior of the
+reCAPTCHA widget. Available options:
+
+=over
+
+=item * C<theme>
+
+The color theme of the widget. Possible values are C<'dark'> and C<'light'>.
+
+=item * C<type>
+
+The type of the captcha to serve. Possible values are C<'audio'> and
+C<'image'>.
+
+=item * C<size>
+
+The size of the widget. Possible values are C<'compact'> and C<'normal'>.
+
+=back
+
+See also: <grecaptcha.render parameters|https://developers.google.com/recaptcha/docs/display#render_param>.
+
+=cut
+
 sub get_html {
     my ( $self, $pubkey, $options ) = @_;
 
@@ -90,6 +161,39 @@ sub get_html {
     );
 
 }
+
+=head2 check_answer
+
+Verifies the user's response.
+
+    my $result = $rc->check_answer('private key', $response);
+
+    if ($result->{is_valid}) {
+        # ...
+    }
+
+Parameters:
+
+=over 4
+
+=item * C<$privatekey>
+
+B<(Required)> The site's private key provided by API
+
+=item * C<$response>
+
+B<(Required)> Response string retrieved from the submitted form field
+C<g-recaptcha-response>.
+
+=item * C<$remoteip>
+
+IP address of the user.
+
+=back
+
+Returns a reference to a hash containing two fields: C<is_valid> and C<error>.
+
+=cut
 
 sub check_answer {
     my ( $self, $secretkey, $response, $remoteip ) = @_;
@@ -125,108 +229,6 @@ sub check_answer {
     }
 }
 
-1;
-
-=head1 SYNOPSIS
-
-Captcha::reCAPTCHA::V2 enables you to integrate reCAPTCHA version 2 into your
-web application.
-
-    use Captcha::reCAPTCHA::V2;
-
-    # Create a new instance of Captcha::reCAPTCHA::V2
-    my $rc = Captcha::reCAPTCHA::V2->new;
-
-    # Get HTML code to display the reCAPTCHA
-    my $rc_html = $rc->get_html('public key');
-
-    # Verify user's response
-    my $result = $rc->check_answer('private key', $response);
-
-    if ($result->{is_valid}){
-        # Good
-    } else {
-        # Bad
-        $error = $result->{error};
-    }
-
-=head1 SUBROUTINES/METHODS
-
-=head2 get_html
-
-Generates HTML for rendering reCAPTCHA widget which should be displayed in template.
-Arguments:
-
-=head3 C<$publickey>
-
-B<(Required)> The site's public key provided by API
-
-=head3 C<$options>
-
-A reference to hash containing parameters to set the appearance and behavior
-of reCAPTCHA widget, L<see grecaptcha.render parameters|https://developers.google.com/recaptcha/docs/display#render_param>.
-The paremeters can contain these following keys:
-
-=over
-
-=item C<theme>
-
-The color theme of the of the widget. Possible values are 'dark' and 'light'.
-
-=item C<type>
-
-The type of the reCAPTCHA to serve. Possible values are 'audio' and 'image'.
-
-=item C<size>
-
-The size of the widget. Possible values are 'compact' and 'normal'.
-
-=back
-
-Example:
-
-    # In route handler
-    my $widget = $rc->get_html('public key', { theme => 'dark', type => 'audio' });
-
-    template 'index' => {
-        recaptcha => $widget
-    };
-
-    # In template
-    [% recaptcha %]
-
-=head2 check_answer
-
-Verifies user's response to a reCAPTCHA challenge to check if the answer is correct.
-Arguments:
-
-=head3 C<$privatekey>
-
-B<(Required)> The site's private key provided by API
-
-=head3 C<$response>
-
-B<(Required)> Response string retrieved from the submitted form field
-C<g-recaptcha-response>.
-
-=head3 C<$remoteip>
-
-IP address of the user.
-
-Returns a reference to a hash containing two fields: C<is_valid> and C<error>.
-
-Example:
-
-    my $response  = param('g-recaptcha-response');
-    my $result    = recaptcha_check('private key', $response);
-
-    if( $result->{is_valid} ){
-        print "The answer is correct!";
-    }
-    else {
-        print $result->{error};
-    }
-
 =head1 SEE ALSO
 
 =for :list
@@ -241,3 +243,5 @@ Based on Andy Armstrong's a perl implementation of the reCAPTCHA API version 1
 (Captcha::reCAPTCHA).
 
 =cut
+
+1;

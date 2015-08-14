@@ -7,7 +7,7 @@ use HTTP::Tiny;
 use Carp;
 use JSON;
 
-# ABSTRACT: Perl implementation to reCAPTCHA API version 2
+# ABSTRACT: A Perl implementation of reCAPTCHA API version 2
 
 # VERSION
 
@@ -129,32 +129,25 @@ sub check_answer {
 
 =head1 SYNOPSIS
 
-Captcha::reCAPTCHA::V2 provides easy way to use reCAPTCHA version 2
-in your web application.
+Captcha::reCAPTCHA::V2 enables you to integrate reCAPTCHA version 2 into your
+web application.
 
     use Captcha::reCAPTCHA::V2;
 
+    # Create a new instance of Captcha::reCAPTCHA::V2
     my $rc = Captcha::reCAPTCHA::V2->new;
 
-    # Get widget in HTML to display the reCAPTCHA
-    my $widget = $rc->get_html('public key');
-
-    # Forward HTML to render in template
-    return template 'feedback', {
-        recaptcha => $widget
-    };
-
-    # Display in template
-    [% recaptcha %]
+    # Get HTML code to display the reCAPTCHA
+    my $rc_html = $rc->get_html('public key');
 
     # Verify user's response
-    my $response  = param('g-recaptcha-response');
-    my $result    = $rc->check_answer('private key', $response);
+    my $result = $rc->check_answer('private key', $response);
 
     if ($result->{is_valid}){
         # Good
     } else {
         # Bad
+        $error = $result->{error};
     }
 
 =head1 SUBROUTINES/METHODS

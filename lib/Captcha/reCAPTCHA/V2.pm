@@ -2,9 +2,10 @@ package Captcha::reCAPTCHA::V2;
 
 use strict;
 use warnings;
+
+use Carp;
 use HTML::Tiny;
 use HTTP::Tiny;
-use Carp;
 use JSON;
 
 # ABSTRACT: A Perl implementation of reCAPTCHA API version 2

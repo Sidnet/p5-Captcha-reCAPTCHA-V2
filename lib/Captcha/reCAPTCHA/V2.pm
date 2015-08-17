@@ -69,7 +69,7 @@ sub element_id {
     return 'recaptcha_'.substr($key, 0, 10);
 }
 
-sub _get_grecaptcha {
+sub _recaptcha_script {
     my ($self, $sitekey, $options) = @_;
 
     my $html = $self->{html};
@@ -138,7 +138,7 @@ sub get_html {
         croak 'Options must be a reference to hash';
     }
 
-    my $script = $self->_get_grecaptcha($pubkey, $options);
+    my $script = $self->_recaptcha_script($pubkey, $options);
 
     my $html = $self->{html};
 

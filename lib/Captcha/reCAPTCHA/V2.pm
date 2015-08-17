@@ -26,7 +26,7 @@ web application.
     my $rc_html = $rc->html('public key');
 
     # Verify user's response
-    my $result = $rc->check_answer('private key', $response);
+    my $result = $rc->verify('private key', $response);
 
     if ($result->{is_valid}){
         # Good
@@ -161,11 +161,11 @@ sub html {
 
 }
 
-=head2 check_answer
+=head2 verify
 
 Verifies the user's response.
 
-    my $result = $rc->check_answer('private key', $response);
+    my $result = $rc->verify('private key', $response);
 
     if ($result->{is_valid}) {
         # ...
@@ -194,7 +194,7 @@ Returns a reference to a hash containing two fields: C<is_valid> and C<error>.
 
 =cut
 
-sub check_answer {
+sub verify {
     my ($self, $secretkey, $response, $remoteip) = @_;
 
     if (!defined $secretkey) {

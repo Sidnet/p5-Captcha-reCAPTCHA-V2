@@ -67,12 +67,12 @@ sub new {
 }
 
 sub _extract_key {
-    my ( $self, $key ) = @_;
-    return substr( $key, 0, 10 );
+    my ($self, $key) = @_;
+    return substr($key, 0, 10);
 }
 
 sub _get_grecaptcha {
-    my( $self, $sitekey, $options ) = @_;
+    my ($self, $sitekey, $options) = @_;
 
     $options ||= {};
 
@@ -83,7 +83,7 @@ sub _get_grecaptcha {
     return $html->script(
         { type => 'text/javascript' },
         'var onloadCallback = function(){'.
-            "grecaptcha.render('" . $self->{element_id} . $self->_extract_key( $sitekey ) .
+            "grecaptcha.render('" . $self->{element_id} . $self->_extract_key($sitekey) .
             "'," . $json_options . ");".
         '};'
     );
@@ -130,17 +130,17 @@ See also: <grecaptcha.render parameters|https://developers.google.com/recaptcha/
 =cut
 
 sub get_html {
-    my ( $self, $pubkey, $options ) = @_;
+    my ($self, $pubkey, $options) = @_;
 
-    if( !defined $pubkey ){
+    if (!defined $pubkey) {
         croak 'Public key is required to use reCAPTCHA';
     }
 
-    unless( ref $options eq "HASH" ){
+    unless (ref $options eq "HASH") {
         croak 'Options must be a reference to hash';
     }
 
-    my $script = $self->_get_grecaptcha( $pubkey, $options );
+    my $script = $self->_get_grecaptcha($pubkey, $options);
 
     my $html = $self->{html};
 
@@ -157,7 +157,7 @@ sub get_html {
         "\n",
         $html->tag(
             'div',
-            { id => $self->{element_id} . $self->_extract_key( $pubkey ) }
+            { id => $self->{element_id} . $self->_extract_key($pubkey) }
         ),
     );
 
@@ -197,13 +197,13 @@ Returns a reference to a hash containing two fields: C<is_valid> and C<error>.
 =cut
 
 sub check_answer {
-    my ( $self, $secretkey, $response, $remoteip ) = @_;
+    my ($self, $secretkey, $response, $remoteip) = @_;
 
-    if ( !defined $secretkey ){
+    if (!defined $secretkey) {
         croak 'Secret key is required to verify reCAPTCHA';
     }
 
-    if ( !defined $response ){
+    if (!defined $response) {
         croak 'Response from user is required to verify reCAPTCHA';
     }
 
@@ -219,9 +219,9 @@ sub check_answer {
         $params
     );
 
-    if( $res->{success} ){
+    if ($res->{success}) {
         my $content = decode_json $res->{content};
-        if( $content->{success} ){
+        if ($content->{success}){
             return { is_valid => 1 };
         } else {
             return { is_valid => 0, error => $content->{'error-codes'}->[0] };

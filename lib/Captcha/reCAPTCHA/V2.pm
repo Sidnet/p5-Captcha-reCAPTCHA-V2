@@ -72,8 +72,6 @@ sub element_id {
 sub _get_grecaptcha {
     my ($self, $sitekey, $options) = @_;
 
-    $options ||= {};
-
     my $html = $self->{html};
 
     my $json_options = $html->json_encode({ sitekey => $sitekey, %$options });
@@ -129,6 +127,8 @@ See also: <grecaptcha.render parameters|https://developers.google.com/recaptcha/
 
 sub get_html {
     my ($self, $pubkey, $options) = @_;
+
+    $options ||= {};
 
     if (!defined $pubkey) {
         croak 'Public key is required to use reCAPTCHA';

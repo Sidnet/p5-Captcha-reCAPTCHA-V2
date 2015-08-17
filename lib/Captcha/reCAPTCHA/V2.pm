@@ -61,14 +61,12 @@ sub new {
 
     $self->{verify_api} = 'https://www.google.com/recaptcha/api/siteverify';
 
-    $self->{element_id} = 'recaptcha_';
-
     return $self;
 }
 
-sub _extract_key {
+sub element_id {
     my ($self, $key) = @_;
-    return substr($key, 0, 10);
+    return 'recaptcha_'.substr($key, 0, 10);
 }
 
 sub _get_grecaptcha {
@@ -83,7 +81,7 @@ sub _get_grecaptcha {
     return $html->script(
         { type => 'text/javascript' },
         'var onloadCallback = function(){'.
-            "grecaptcha.render('" . $self->{element_id} . $self->_extract_key($sitekey) .
+            "grecaptcha.render('" . $self->element_id($sitekey) .
             "'," . $json_options . ");".
         '};'
     );
@@ -157,7 +155,7 @@ sub get_html {
         "\n",
         $html->tag(
             'div',
-            { id => $self->{element_id} . $self->_extract_key($pubkey) }
+            { id => $self->element_id($pubkey) }
         ),
     );
 

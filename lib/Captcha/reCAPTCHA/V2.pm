@@ -23,7 +23,7 @@ web application.
     my $rc = Captcha::reCAPTCHA::V2->new;
 
     # Get HTML code to display the reCAPTCHA
-    my $rc_html = $rc->get_html('public key');
+    my $rc_html = $rc->html('public key');
 
     # Verify user's response
     my $result = $rc->check_answer('private key', $response);
@@ -85,11 +85,11 @@ sub _recaptcha_script {
     );
 }
 
-=method get_html
+=method html
 
 Returns the HTML code for rendering the reCAPTCHA widget.
 
-    my $html = $rc->get_html('public key', { theme => 'dark' });
+    my $html = $rc->html('public key', { theme => 'dark' });
 
 Parameters:
 
@@ -125,7 +125,7 @@ See also: <grecaptcha.render parameters|https://developers.google.com/recaptcha/
 
 =cut
 
-sub get_html {
+sub html {
     my ($self, $pubkey, $options) = @_;
 
     $options ||= {};

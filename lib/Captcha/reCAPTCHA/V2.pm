@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Carp;
-use HTML::Tiny;
 use HTTP::Tiny;
 use JSON;
 
@@ -54,8 +53,6 @@ sub new {
             ($Captcha::reCAPTCHA::V2::VERSION || 0) . ' (Perl)'
     );
 
-    $self->{html} = HTML::Tiny->new();
-
     $self->{widget_api} = 'https://www.google.com/recaptcha/api.js?'.
                             'onload=onloadCallback&render=explicit';
 
@@ -72,17 +69,11 @@ sub element_id {
 sub _recaptcha_script {
     my ($self, $sitekey, $options) = @_;
 
-    my $html = $self->{html};
+    my $json_options = encode_json({ sitekey => $sitekey, %$options });
 
-    my $json_options = $html->json_encode({ sitekey => $sitekey, %$options });
+    return '<script type="text/javascript">var onloadCallback = function(){grecaptcha.render(\''
+        . $self->element_id($sitekey) . '\',' . $json_options . ');};</script>';
 
-    return $html->script(
-        { type => 'text/javascript' },
-        'var onloadCallback = function(){'.
-            "grecaptcha.render('" . $self->element_id($sitekey) .
-            "'," . $json_options . ");".
-        '};'
-    );
 }
 
 =method html
@@ -140,23 +131,11 @@ sub html {
 
     my $script = $self->_recaptcha_script($pubkey, $options);
 
-    my $html = $self->{html};
-
     return join(
         '',
         $script,
-        "\n",
-        $html->script(
-            {
-                type => 'text/javascript',
-                src  =>  $self->{widget_api}
-            }
-        ),
-        "\n",
-        $html->tag(
-            'div',
-            { id => $self->element_id($pubkey) }
-        ),
+        '<script src="' . $self->{widget_api} . '" type="text/javascript"></script>',
+        '<div id="'. $self->element_id($pubkey) . '"></div>',
     );
 
 }

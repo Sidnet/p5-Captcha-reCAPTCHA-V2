@@ -199,7 +199,7 @@ sub verify {
         if ($content->{success}){
             return { is_valid => 1 };
         } else {
-            return { is_valid => 0, error => $content->{'error-codes'}->[0] };
+            return { is_valid => 0, error => $content->{'error-codes'} };
         }
     }
 }

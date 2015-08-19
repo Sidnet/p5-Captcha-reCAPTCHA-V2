@@ -22,7 +22,7 @@ web application.
     my $rc = Captcha::reCAPTCHA::V2->new;
 
     # Get HTML code to display the reCAPTCHA
-    my $rc_html = $rc->html('public key');
+    my $rc_html = $rc->html('site key');
 
     # Verify user's response
     my $result = $rc->verify('private key', $response);
@@ -78,13 +78,13 @@ sub _recaptcha_script {
 
 Returns the HTML code for rendering the reCAPTCHA widget.
 
-    my $html = $rc->html('public key', { theme => 'dark' });
+    my $html = $rc->html('site key', { theme => 'dark' });
 
 Parameters:
 
 =over 4
 
-=item * C<$publickey>
+=item * C<$sitekey>
 
 B<(Required)> The site's public key provided by API
 
@@ -115,25 +115,25 @@ See also: <grecaptcha.render parameters|https://developers.google.com/recaptcha/
 =cut
 
 sub html {
-    my ($self, $pubkey, $options) = @_;
+    my ($self, $sitekey, $options) = @_;
 
     $options ||= {};
 
-    if (!defined $pubkey) {
-        croak 'Public key is required to use reCAPTCHA';
+    if (!defined $sitekey) {
+        croak 'Site key is required to use reCAPTCHA';
     }
 
     unless (ref $options eq "HASH") {
         croak 'Options must be a reference to hash';
     }
 
-    my $script = _recaptcha_script($pubkey, $options);
+    my $script = _recaptcha_script($sitekey, $options);
 
     return join(
         '',
         $script,
         '<script src="' . $self->{widget_api} . '" type="text/javascript"></script>',
-        '<div id="'. _element_id($pubkey) . '"></div>',
+        '<div id="'. _element_id($sitekey) . '"></div>',
     );
 }
 
@@ -171,9 +171,9 @@ Returns a reference to a hash containing two fields: C<is_valid> and C<error>.
 =cut
 
 sub verify {
-    my ($self, $secretkey, $response, $remoteip) = @_;
+    my ($self, $secret, $response, $remoteip) = @_;
 
-    if (!defined $secretkey) {
+    if (!defined $secret) {
         croak 'Secret key is required to verify reCAPTCHA';
     }
 
@@ -182,7 +182,7 @@ sub verify {
     }
 
     my $params = {
-        secret    => $secretkey,
+        secret    => $secret,
         response  => $response,
     };
 

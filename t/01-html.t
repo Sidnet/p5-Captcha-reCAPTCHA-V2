@@ -7,7 +7,7 @@ use Captcha::reCAPTCHA::V2;
 
 my $rc2 = Captcha::reCAPTCHA::V2->new;
 
-my $script = $rc2->_recaptcha_script(
+my $script = Captcha::reCAPTCHA::V2::_recaptcha_script(
 	'ThisIsASitekey',
 	{ 
 		theme => 'light',
@@ -33,4 +33,4 @@ my $captcha_widget_html = $grecaptcha_script . q^<script src="https://www.google
 
 is( $html, $captcha_widget_html, 'get correct html to render the widget' );
 
-done_testing;
+done_testing

@@ -25,7 +25,7 @@ web application.
     my $rc_html = $rc->html('site key');
 
     # Verify user's response
-    my $result = $rc->verify('private key', $response);
+    my $result = $rc->verify('secret', $response);
 
     if ($result->{success}){
         # Good
@@ -141,7 +141,7 @@ sub html {
 
 Verifies the user's response.
 
-    my $result = $rc->verify('private key', $response);
+    my $result = $rc->verify('secret', $response);
 
     if ($result->{success}) {
         # ...
@@ -151,9 +151,9 @@ Parameters:
 
 =over 4
 
-=item * C<$privatekey>
+=item * C<$secret>
 
-B<(Required)> The site's private key provided by API
+B<(Required)> The site's secret key provided by API
 
 =item * C<$response>
 

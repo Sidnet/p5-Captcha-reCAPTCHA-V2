@@ -73,7 +73,6 @@ sub _recaptcha_script {
 
     return '<script type="text/javascript">var onloadCallback = function(){grecaptcha.render(\''
         . _element_id($sitekey) . '\',' . $json_options . ');};</script>';
-
 }
 
 =method html
@@ -137,7 +136,6 @@ sub html {
         '<script src="' . $self->{widget_api} . '" type="text/javascript"></script>',
         '<div id="'. _element_id($pubkey) . '"></div>',
     );
-
 }
 
 =head2 verify
@@ -203,7 +201,6 @@ sub verify {
         } else {
             return { is_valid => 0, error => $content->{'error-codes'}->[0] };
         }
-
     }
 }
 

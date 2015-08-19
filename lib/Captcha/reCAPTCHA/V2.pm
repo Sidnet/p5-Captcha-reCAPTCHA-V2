@@ -112,7 +112,7 @@ The size of the widget. Possible values are C<'compact'> and C<'normal'>.
 
 =back
 
-See also: <grecaptcha.render parameters|https://developers.google.com/recaptcha/docs/display#render_param>.
+See also: L<grecaptcha.render parameters|https://developers.google.com/recaptcha/docs/display#render_param>.
 
 =cut
 

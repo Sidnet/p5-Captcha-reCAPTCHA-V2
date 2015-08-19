@@ -30,8 +30,8 @@ web application.
     if ($result->{success}){
         # Good
     } else {
-        # Bad
-        $error_codes = $result->{error_codes};
+        # Bad -- get first error that was returned
+        $error = $result->{error_codes}->[0];
     }
 
 =method new

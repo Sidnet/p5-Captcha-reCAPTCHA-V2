@@ -27,11 +27,11 @@ web application.
     # Verify user's response
     my $result = $rc->verify('private key', $response);
 
-    if ($result->{is_valid}){
+    if ($result->{success}){
         # Good
     } else {
         # Bad
-        $error = $result->{error};
+        $error_codes = $result->{error_codes};
     }
 
 =method new
@@ -143,7 +143,7 @@ Verifies the user's response.
 
     my $result = $rc->verify('private key', $response);
 
-    if ($result->{is_valid}) {
+    if ($result->{success}) {
         # ...
     }
 
@@ -166,7 +166,7 @@ IP address of the user.
 
 =back
 
-Returns a reference to a hash containing two fields: C<is_valid> and C<error>.
+Returns a reference to a hash containing two fields: C<success> and C<error_codes>.
 
 =cut
 

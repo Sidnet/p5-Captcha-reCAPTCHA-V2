@@ -44,11 +44,10 @@ Creates a new instance of Captcha::reCAPTCHA::V2.
 
 sub new {
     my $class = shift;
-    $class = ref $class if ref $class;
     my $self = bless {}, $class;
 
     # Initialize the user agent object
-    $self->{ua}   = HTTP::Tiny->new(
+    $self->{ua} = HTTP::Tiny->new(
         agent => 'Captcha::reCAPTCHA::V2/'.
             ($Captcha::reCAPTCHA::V2::VERSION || 0) . ' (Perl)'
     );
@@ -62,8 +61,8 @@ sub new {
 }
 
 sub _element_id {
-    my $key = shift;
-    return 'recaptcha_'.substr($key, 0, 10);
+    my ($key) = @_;
+    return 'recaptcha_' . substr($key, 0, 10);
 }
 
 sub _recaptcha_script {

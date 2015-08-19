@@ -196,9 +196,9 @@ sub verify {
     if ($res->{success}) {
         my $content = decode_json $res->{content};
         if ($content->{success}){
-            return { is_valid => 1 };
+            return { success => 1 };
         } else {
-            return { is_valid => 0, error => $content->{'error-codes'} };
+            return { success => 0, error_codes => $content->{'error-codes'} };
         }
     }
 }

@@ -61,18 +61,18 @@ sub new {
     return $self;
 }
 
-sub element_id {
-    my ($self, $key) = @_;
+sub _element_id {
+    my $key = shift;
     return 'recaptcha_'.substr($key, 0, 10);
 }
 
 sub _recaptcha_script {
-    my ($self, $sitekey, $options) = @_;
+    my ($sitekey, $options) = @_;
 
     my $json_options = encode_json({ sitekey => $sitekey, %$options });
 
     return '<script type="text/javascript">var onloadCallback = function(){grecaptcha.render(\''
-        . $self->element_id($sitekey) . '\',' . $json_options . ');};</script>';
+        . _element_id($sitekey) . '\',' . $json_options . ');};</script>';
 
 }
 
@@ -129,13 +129,13 @@ sub html {
         croak 'Options must be a reference to hash';
     }
 
-    my $script = $self->_recaptcha_script($pubkey, $options);
+    my $script = _recaptcha_script($pubkey, $options);
 
     return join(
         '',
         $script,
         '<script src="' . $self->{widget_api} . '" type="text/javascript"></script>',
-        '<div id="'. $self->element_id($pubkey) . '"></div>',
+        '<div id="'. _element_id($pubkey) . '"></div>',
     );
 
 }

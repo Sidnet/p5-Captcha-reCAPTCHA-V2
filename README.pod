@@ -8,7 +8,7 @@ Captcha::reCAPTCHA::V2 - A Perl implementation of reCAPTCHA API version 2
 
 =head1 VERSION
 
-version 0.2
+version 0.3
 
 =head1 SYNOPSIS
 

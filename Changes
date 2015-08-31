@@ -1,6 +1,7 @@
 Revision history for Captcha-reCAPTCHA-V2
 
 {{$NEXT}}
+          It is now possible to set JSON formatting options
 
 0.2       2015-08-19
           Fixed link in documentation

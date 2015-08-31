@@ -66,9 +66,9 @@ sub _element_id {
 }
 
 sub _recaptcha_script {
-    my ($sitekey, $options) = @_;
+    my ($self, $sitekey, $options) = @_;
 
-    my $json_options = encode_json({ sitekey => $sitekey, %$options });
+    my $json_options = to_json({ sitekey => $sitekey, %$options }, $self->{json_options} || {});
 
     return '<script type="text/javascript">var onloadCallback = function(){grecaptcha.render(\''
         . _element_id($sitekey) . '\',' . $json_options . ');};</script>';
@@ -129,7 +129,7 @@ sub html {
         croak 'Options must be a reference to hash';
     }
 
-    my $script = _recaptcha_script($sitekey, $options);
+    my $script = $self->_recaptcha_script($sitekey, $options);
 
     return join(
         '',

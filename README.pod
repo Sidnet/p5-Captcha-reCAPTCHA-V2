@@ -122,7 +122,7 @@ Returns a reference to a hash containing two fields: C<success> and C<error_code
 
 * L<Captcha::reCAPTCHA>
 
-* L<Google reCAPTCHA API Reference|https://www.google.com/recaptcha/intro/index.html/>
+* L<Google reCAPTCHA API Reference|https://www.google.com/recaptcha/intro/index.html>
 
 =head1 ACKNOWLEDGEMENTS
 

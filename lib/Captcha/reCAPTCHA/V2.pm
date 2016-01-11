@@ -24,6 +24,9 @@ web application.
     # Get HTML code to display the reCAPTCHA
     my $rc_html = $rc->html('site key');
 
+    # Retrieve reponse code from submitted from field C<'g-recpatcha-response'>
+    my $response = param('g-recaptcha-response');
+
     # Verify user's response
     my $result = $rc->verify('secret', $response);
 
@@ -142,6 +145,8 @@ sub html {
 =head2 verify
 
 Verifies the user's response.
+
+    my $response = param( 'g-recaptcha-response' );
 
     my $result = $rc->verify('secret', $response);
 

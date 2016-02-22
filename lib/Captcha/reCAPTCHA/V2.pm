@@ -41,13 +41,28 @@ web application.
 
 Creates a new instance of Captcha::reCAPTCHA::V2.
 
-    my $rc = Captcha::reCAPTCHA::V2->new;
+    my $rc = Captcha::reCAPTCHA::V2->new(hl => en);
+
+Parameters:
+
+=over 4
+
+=item * C<$hl>
+
+Specific language to render widget. Default value is C<'en'>.
+Language options see L<Language codes|https://developers.google.com/recaptcha/docs/language>.
+
+=back
+
+=back
 
 =cut
 
 sub new {
-    my $class = shift;
+    my ($class, %options) = @_;
     my $self = bless {}, $class;
+
+    my $hl = $options{hl} || 'en';
 
     # Initialize the user agent object
     $self->{ua} = HTTP::Tiny->new(
@@ -56,7 +71,7 @@ sub new {
     );
 
     $self->{widget_api} = 'https://www.google.com/recaptcha/api.js?'.
-                            'onload=onloadCallback&render=explicit';
+                            'onload=onloadCallback&render=explicit&hl='.$hl;
 
     $self->{verify_api} = 'https://www.google.com/recaptcha/api/siteverify';
 

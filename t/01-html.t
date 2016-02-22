@@ -31,8 +31,21 @@ my $html = $rc2->html(
     }
 );
 
-my $captcha_widget_html = $grecaptcha_script . q^<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" type="text/javascript"></script><div id="recaptcha_ThisIsASit"></div>^;
+my $captcha_widget_html = $grecaptcha_script . q^<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=en" type="text/javascript"></script><div id="recaptcha_ThisIsASit"></div>^;
 
 is( $html, $captcha_widget_html, 'get correct html to render the widget' );
+like( $html, qr/hl=en/, 'get correct default display language is "en"' );
+
+$rc2 = Captcha::reCAPTCHA::V2->new(hl => 'th');
+$html = $rc2->html(
+    'ThisIsASitekey',
+    {
+        theme => 'light',
+        type  => 'image',
+        size  => 'normal',
+    }
+);
+
+like( $html, qr/hl=th/, 'get specific language to render widget is "th"' );
 
 done_testing
